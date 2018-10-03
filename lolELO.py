@@ -206,9 +206,9 @@ for group in playTeams.group.unique():
     game4 = worldResults['prob'][(worldResults.week == 2) & (worldResults.team == team1) & (worldResults.opp == team2)].values[0]
     game5 = worldResults['prob'][(worldResults.week == 2) & (worldResults.team == team2) & (worldResults.opp == team3)].values[0]
     game6 = worldResults['prob'][(worldResults.week == 2) & (worldResults.team == team1) & (worldResults.opp == team3)].values[0]
-    prob1 = game1 + game3 + game4 * game5
-    prob2 = (1- game1) + game2 + (1 - game4) * game5
-    prob3 = (1 - game2) + (1 - game3) + (1 - game5) * (1 - game6)
+    prob1 = game1 + game3 + game4 + game5
+    prob2 = (1- game1) + game2 + (1 - game4) + game6
+    prob3 = (1 - game2) + (1 - game3) + (1 - game5) + (1 - game6)
     playTeams['condWins'][(playTeams['team'] == team3)] = prob3
     playTeams['condWins'][(playTeams['team'] == team2)] = prob2
     playTeams['condWins'][(playTeams['team'] == team1)] = prob1
