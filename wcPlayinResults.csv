@@ -1,0 +1,27 @@
+split,year,league,gameid,date,week,game,group,team,opp,result,k,d,played
+2018-WC,2018,WC,1,10/1/2018,1,1,PC,Cloud9,KaBuM e-Sports,1,13,6,X
+2018-WC,2018,WC,2,10/1/2018,1,2,PD,Gambit Esports,Kaos Latin Gamers,1,13,0,X
+2018-WC,2018,WC,3,10/1/2018,1,3,PD,G-Rex,Kaos Latin Gamers,1,16,2,X
+2018-WC,2018,WC,4,10/1/2018,1,4,PC,KaBuM e-Sports,DetonatioN FocusMe,0,10,17,X
+2018-WC,2018,WC,5,10/1/2018,1,5,PC,Cloud9,DetonatioN FocusMe,1,18,14,X
+2018-WC,2018,WC,6,10/1/2018,1,6,PD,G-Rex,Gambit Esports,1,19,9,X
+2018-WC,2018,WC,7,10/2/2018,1,7,PA,EDward Gaming,Infinity eSports,1,20,2,X
+2018-WC,2018,WC,8,10/2/2018,1,8,PB,G2 Esports,SuperMassive,0,1,5,X
+2018-WC,2018,WC,9,10/2/2018,1,9,PA,Infinity eSports,Dire Wolves,0,4,9,X
+2018-WC,2018,WC,10,10/2/2018,1,10,PB,SuperMassive,Ascension Gaming,1,9,4,X
+2018-WC,2018,WC,11,10/2/2018,1,11,PA,EDward Gaming,Dire Wolves,1,11,7,X
+2018-WC,2018,WC,12,10/2/2018,1,12,PB,G2 Esports,Ascension Gaming,1,13,7,X
+2018-WC,2018,WC,13,10/3/2018,2,1,PC,Cloud9,KaBuM e-Sports,1,18,8,X
+2018-WC,2018,WC,14,10/3/2018,2,2,PD,Gambit Esports,Kaos Latin Gamers,1,14,11,X
+2018-WC,2018,WC,15,10/3/2018,2,3,PD,G-Rex,Kaos Latin Gamers,1,28,16,X
+2018-WC,2018,WC,16,10/3/2018,2,4,PC,KaBuM e-Sports,DetonatioN FocusMe,1,16,6,X
+2018-WC,2018,WC,17,10/3/2018,2,5,PC,Cloud9,DetonatioN FocusMe,1,14,9,X
+2018-WC,2018,WC,18,10/3/2018,2,6,PD,G-Rex,Gambit Esports,1,18,4,X
+2018-WC,2018,WC,19,10/4/2018,2,7,PA,EDward Gaming,Infinity eSports,0,11,15,X
+2018-WC,2018,WC,20,10/4/2018,2,8,PB,G2 Esports,SuperMassive,1,16,10,X
+2018-WC,2018,WC,21,10/4/2018,2,9,PA,Infinity eSports,Dire Wolves,0,13,24,X
+2018-WC,2018,WC,22,10/4/2018,2,10,PB,SuperMassive,Ascension Gaming,1,18,9,X
+2018-WC,2018,WC,23,10/4/2018,2,11,PA,EDward Gaming,Dire Wolves,1,18,2,X
+2018-WC,2018,WC,24,10/4/2018,2,12,PB,G2 Esports,Ascension Gaming,1,22,9,X
+2018-WC,2018,WC,25,10/5/2018,3,1,PB,G2 Esports,SuperMassive,1,16,3,X
+2018-WC,2018,WC,26,10/5/2018,3,2,PC,KaBuM e-Sports,DetonatioN FocusMe,0,0,7,X
