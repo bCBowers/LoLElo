@@ -117,9 +117,9 @@ leagueList['teamid'] = leagueList['teamid'].astype('str')
 teamELO = teamELO.merge(leagueList, on='teamid')
 
 # Set default Elo for all teams -> league dependent due to talent discrepancies
-teamELO['elo'] = 1500 #1600 is an abitrary number and based on other popular ELO systems
-teamELO['elo'][(teamELO['league'] == 'LCK')] = 1750
-teamELO['elo'][(teamELO['league'] == 'LPL')] = 1750
+teamELO['elo'] = 1475 #1600 is an abitrary number and based on other popular ELO systems
+teamELO['elo'][(teamELO['league'] == 'LCK')] = 1800
+teamELO['elo'][(teamELO['league'] == 'LPL')] = 1800
 
 #leagues = full_lol['league'].unique()
 #leagues=pd.DataFrame(leagues) 
@@ -243,15 +243,28 @@ for group in wcTeams.group.unique():
     wcTeams['condWins'][(wcTeams['team'] == team3)] = prob3
     wcTeams['condWins'][(wcTeams['team'] == team2)] = prob2
     wcTeams['condWins'][(wcTeams['team'] == team1)] = prob1
-    wcTeams['currWins'][(wcTeams['team'] == team1)] = worldResults['result'][(worldResults.team == team1)].sum() \
-    + (worldResults['played'][(worldResults.opp == team1)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team1)].sum())
-    wcTeams['currWins'][(wcTeams['team'] == team2)] = worldResults['result'][(worldResults.team == team2)].sum() \
-    + (worldResults['played'][(worldResults.opp == team2)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team2)].sum())
-    wcTeams['currWins'][(wcTeams['team'] == team3)] = worldResults['result'][(worldResults.team == team3)].sum() \
-    + (worldResults['played'][(worldResults.opp == team3)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team3)].sum())
-    wcTeams['currWins'][(wcTeams['team'] == team4)] = worldResults['result'][(worldResults.team == team4)].sum() \
-    + (worldResults['played'][(worldResults.opp == team4)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team4)].sum())
-    
+      
+    if 'X' in worldResults['played'][(worldResults.team == team1)].values:
+        wcTeams['currWins'][(wcTeams['team'] == team1)] = worldResults['result'][(worldResults.team == team1)].sum() \
+        + (worldResults['played'][(worldResults.opp == team1)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team1)].sum())
+    else:
+        wcTeams['currWins'][(wcTeams['team'] == team1)] = 0
+    if 'X' in worldResults['played'][(worldResults.team == team2)].values:
+        wcTeams['currWins'][(wcTeams['team'] == team2)] = worldResults['result'][(worldResults.team == team2)].sum() \
+        + (worldResults['played'][(worldResults.opp == team2)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team2)].sum())
+    else:
+        wcTeams['currWins'][(wcTeams['team'] == team2)] = 0
+    if 'X' in worldResults['played'][(worldResults.team == team3)].values:
+        wcTeams['currWins'][(wcTeams['team'] == team3)] = worldResults['result'][(worldResults.team == team3)].sum() \
+        + (worldResults['played'][(worldResults.opp == team3)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team3)].sum())
+    else:
+        wcTeams['currWins'][(wcTeams['team'] == team3)] = 0
+    if 'X' in worldResults['played'][(worldResults.team == team4)].values:
+        wcTeams['currWins'][(wcTeams['team'] == team4)] = worldResults['result'][(worldResults.team == team4)].sum() \
+        + (worldResults['played'][(worldResults.opp == team4)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team4)].sum())
+    else:
+        wcTeams['currWins'][(wcTeams['team'] == team4)] = 0
+             
 # Analyze the knockout rounds separately due to random draw
 seeds = pd.read_csv('knockoutSeeds.csv')
 seeds['sfodds'] = ''
