@@ -15,11 +15,15 @@ import math
 import seaborn as sns
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-white')
+
+Probability(1847, 1723)
  
 # Function to calculate win probability based on Elo rating
 def Probability(rating1, rating2):
  
     return 1.0 * 1.0 / (1 + 1.0 * math.pow(10, 1.0 * (rating1 - rating2) / 400))
+
+np.log(abs(4) + 1)
 
 # Function to update Elo rating based on match results 
 def EloRating(Ra, Rb, K, d, kill, death):
@@ -148,20 +152,24 @@ full_lol = full_lol.drop(['playerid'], axis=1)
 worldResults['teamid'] = worldResults['teamid'].astype('str')
 
 full_lol = pd.concat([full_lol, worldResults])
+
+
 full_lol['date'] = pd.to_datetime(full_lol['date'])
 full_lol = full_lol.sort_values(by=['date'])
+
+full_lol['gameids'] = range(0, len(full_lol))
 
 
 # Cycle through all games and update elo rankings accordingly
 k = 15 #k needs to be tuned
-for game in full_lol['gameid']:
-    team1 = teamELO['teamid'] == full_lol['teamid'][(full_lol['gameid'] == game)].values[0]
-    team2 = teamELO['teamid'] == full_lol['opp'][(full_lol['gameid'] == game)].values[0]
+for game in full_lol['gameids']:
+    team1 = teamELO['teamid'] == full_lol['teamid'][(full_lol['gameids'] == game)].values[0]
+    team2 = teamELO['teamid'] == full_lol['opp'][(full_lol['gameids'] == game)].values[0]
     elo1 = teamELO['elo'][team1].values[0]
     elo2 = teamELO['elo'][team2].values[0]
-    result = full_lol['result'][(full_lol['gameid'] == game)].values[0]
-    kill = full_lol['k'][(full_lol['gameid'] == game)].values[0]
-    death = full_lol['d'][(full_lol['gameid'] == game)].values[0]
+    result = full_lol['result'][(full_lol['gameids'] == game)].values[0]
+    kill = full_lol['k'][(full_lol['gameids'] == game)].values[0]
+    death = full_lol['d'][(full_lol['gameids'] == game)].values[0]
 
     newelo1, newelo2 = EloRating(elo1, elo2, k, result, kill, death)
     
@@ -185,11 +193,9 @@ teamELO = teamELO[['team', 'teamid', 'elo', 'Wins', 'Losses', 'league']] #, 'num
 teamELO.to_csv('teamelo.csv')
 
 # Analyze the World Cup Teams for LoL 2018 Worlds analysis
-wcTeam = ['Ascension Gaming', 'Dire Wolves', 'Kaos Latin Gamers', 'DetonatioN FocusMe', 'SuperMassive', 
-          'Infinity eSports', 'Gambit Esports', 'KaBuM e-Sports', 'Cloud9', 'G2 Esports', 'EDward Gaming', 
-          'MAD Team', 'Flash Wolves', '100 Thieves', 'Team Liquid', 'Vitality', 
-          'Fnatic', 'Invictus Gaming', 'Royal Never Give Up', 'Gen.G', 'Afreeca Freecs', 'KT Rolster', 
-          'Phong Vu Buffalo', 'G-Rex']
+wcTeam = ['Cloud9', 'G2 Esports', 'EDward Gaming', 'MAD Team', 'Flash Wolves', '100 Thieves', 'Team Liquid', 
+          'Vitality', 'Fnatic', 'Invictus Gaming', 'Royal Never Give Up', 'Gen.G', 'Afreeca Freecs', 
+          'KT Rolster', 'Phong Vu Buffalo', 'G-Rex']
 
 wcTeam = pd.DataFrame(wcTeam)
 wcTeam = wcTeam.rename(index=str, columns={0: 'team'})
@@ -201,11 +207,13 @@ wcTeam = wcTeam.merge(wcGroup, on='team')
 wcTeams = wcTeam[(wcTeam.group == 'A') | (wcTeam.group == 'B') | (wcTeam.group == 'C') | (wcTeam.group == 'D')]
 wcTeams['condWins'] = ''
 wcTeams['currWins'] =''
+wcTeams[['condWins', 'currWins']] = wcTeams[['condWins', 'currWins']].apply(pd.to_numeric)
 
 # Read back in current results from games and predict results for all games based on Elo (uses current Elo, not at time of game)
 worldResults = pd.read_csv('wcResults.csv')
 worldResults['prob'] = ''
 worldResults['pred'] = ''
+worldResults['oppwin'] = 1 - worldResults['result']
 for game in worldResults.gameid:
     worldResults['pred'][(worldResults.gameid == game)] = Probability(wcTeams['elo'][(wcTeams['team'] == worldResults['opp'][(worldResults.gameid == game)].values[0])].values[0], 
                 wcTeams['elo'][(wcTeams['team'] == worldResults['team'][(worldResults.gameid == game)].values[0])])
@@ -243,25 +251,28 @@ for group in wcTeams.group.unique():
     wcTeams['condWins'][(wcTeams['team'] == team3)] = prob3
     wcTeams['condWins'][(wcTeams['team'] == team2)] = prob2
     wcTeams['condWins'][(wcTeams['team'] == team1)] = prob1
-      
-    if 'X' in worldResults['played'][(worldResults.team == team1)].values:
+    
+    if worldResults['played'][(worldResults.team == team1) | (worldResults.opp == team1)].str.count('X').sum() > 0:
         wcTeams['currWins'][(wcTeams['team'] == team1)] = worldResults['result'][(worldResults.team == team1)].sum() \
-        + (worldResults['played'][(worldResults.opp == team1)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team1)].sum())
+        + worldResults['oppwin'][(worldResults.opp == team1)].sum()
     else:
         wcTeams['currWins'][(wcTeams['team'] == team1)] = 0
-    if 'X' in worldResults['played'][(worldResults.team == team2)].values:
+    
+    if worldResults['played'][(worldResults.team == team2) | (worldResults.opp == team2)].str.count('X').sum() > 0:
         wcTeams['currWins'][(wcTeams['team'] == team2)] = worldResults['result'][(worldResults.team == team2)].sum() \
-        + (worldResults['played'][(worldResults.opp == team2)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team2)].sum())
+        + worldResults['oppwin'][(worldResults.opp == team2)].sum()
     else:
         wcTeams['currWins'][(wcTeams['team'] == team2)] = 0
-    if 'X' in worldResults['played'][(worldResults.team == team3)].values:
+    
+    if worldResults['played'][(worldResults.team == team3) | (worldResults.opp == team3)].str.count('X').sum() > 0:
         wcTeams['currWins'][(wcTeams['team'] == team3)] = worldResults['result'][(worldResults.team == team3)].sum() \
-        + (worldResults['played'][(worldResults.opp == team3)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team3)].sum())
+        + worldResults['oppwin'][(worldResults.opp == team3)].sum()
     else:
         wcTeams['currWins'][(wcTeams['team'] == team3)] = 0
-    if 'X' in worldResults['played'][(worldResults.team == team4)].values:
+    
+    if worldResults['played'][(worldResults.team == team4) | (worldResults.opp == team4)].str.count('X').sum() > 0:
         wcTeams['currWins'][(wcTeams['team'] == team4)] = worldResults['result'][(worldResults.team == team4)].sum() \
-        + (worldResults['played'][(worldResults.opp == team4)].str.count('X').sum() - worldResults['result'][(worldResults.opp == team4)].sum())
+        + worldResults['oppwin'][(worldResults.opp == team4)].sum()
     else:
         wcTeams['currWins'][(wcTeams['team'] == team4)] = 0
              
@@ -380,7 +391,7 @@ for team in seeds.team:
 ###################### Visualizations
 
 # Next Day's Games    
-tomorrowGames = worldResults[(worldResults.date == '10/10/2018')]
+tomorrowGames = worldResults[(worldResults.date == '10/11/2018')]
 c=0
 x = len(tomorrowGames)
 f, axes = plt.subplots(x,1, sharex='none', sharey='row')
@@ -408,6 +419,8 @@ plt.clf()
     
 # Current Elo Rankings
 wcElo = wcTeam[['team', 'elo', 'league', 'group']]
+
+
 wcElo = wcElo.rename(columns={'team': 'Team', 'elo': 'Elo', 'league': 'League', 'group': 'Group'})
 
 wcElo = wcElo[['Team', 'Elo']]
