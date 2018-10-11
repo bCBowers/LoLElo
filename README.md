@@ -1,3 +1,3 @@
 This model builds on three years of professional League of Legends results from several top leagues (provided here: http://oracleselixir.com/match-data/) to build an Elo model of teams. Similar to club soccer and other international competitions, it is difficult to compare club teams across different leagues because they rarely play head-to-head. An Elo model can help properly account for the relative strengths of different teams and leagues.
 
-This model is currently under development and is being tested during the ongoing LoL World Championships.
+The model is being used to predict the 2018 League of Legends World Championships for StatXP and is described in further detail here: https://www.statxp.com/thelatest/2018/10/6/who-will-win-lol-worlds-2018. Daily updates driven by this model can also be found on www.statxp.com.
