@@ -2,11 +2,7 @@
 #adjust for use on league games
 
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Sep 13 21:12:56 2018
 
-@author: M29480
-"""
 # data source: http://oracleselixir.com/match-data/
 
 import pandas as pd
